@@ -4,10 +4,12 @@ const todoList = document.getElementById("todo-list");
 
 //Add a task
 const addTask = () => {
-  const taskText = todoInput.ariaValueMax.trim();
+  const taskText = todoInput.value.trim();
 
   if (taskText !== "") {
     const taskItem = createTaskItem(taskText);
+    todoList.appendChild(taskItem);
+    todoInput.value = "";
   }
 };
 
@@ -24,8 +26,8 @@ const createTaskItem = (taskText) => {
   taskTextSpan.textContent = taskText;
 
   const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "Delete";
-  document.classList.add("delete-btn");
+  deleteBtn.textContent = "Deleted";
+  deleteBtn.classList.add("delete-btn");
   deleteBtn.addEventListener("click", deleteTask);
 
   taskItem.appendChild(checkbox);
@@ -35,9 +37,26 @@ const createTaskItem = (taskText) => {
   return taskItem;
 };
 //delete tasks
-const deleteTask = () => {
-  const taskItem = event.target.parentnode;
+const deleteTask = (event) => {
+  const taskItem = event.target.parentNode;
+  todoList.removeChild(taskItem);
 };
 //cross out tags
+const toggleTask = (event) => {
+  const taskItem = event.target.parentnode;
+  taskItem.classList.toggle("completed");
+};
 //Event listeners
+addTaskButton.addEventListener("click", addTask);
+todoInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    addTask();
+  }
+});
 //example of tasks
+const initaltasks = ["Buy Groceries", "Pay Bills", "Walk the dog"];
+
+initaltasks.forEach((task) => {
+  const taskItem = createTaskItem(task);
+  todoList.appendChild(taskItem);
+});
